@@ -3,13 +3,11 @@ pyMail
 
 This is a server wrote in python that will process a large amount of information to send out via email.
 
-premise
-=======
+***premise
 
 My fraternity has a large alumni base.  A few (okay more than a few) members still have debt.  This script will process the alumni names, emails, and debt to tailor an email message to each to politely ask for them to update their debt.
 
-Functionality
-=============
+***Functionality
 
 This is a list of the metrics for the program.  An outline for how it will function
 
