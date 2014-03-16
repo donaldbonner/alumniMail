@@ -4,9 +4,9 @@ fileName = 'input.txt'
 inp = open(fileName, 'r+')
 contents = inp.read().strip()
 inp.close()
-contents = contents.replace('[[name]]', 'Alexandria')
-contents = contents.replace('[[email]]', 'aebonner@mtu.edu')
-contents = contents.replace('[[number]]', '1023.24')
+contents = contents.replace('[[name]]', 'John Doe')
+contents = contents.replace('[[email]]', 'exmaple@something.where')
+contents = contents.replace('[[number]]', '1234.56')
 
 if os.path.isfile(fileName + '.out'):
 	print('Output file exists. Deleting and creating up to date file.')
