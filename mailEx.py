@@ -4,7 +4,7 @@ Sample code from Scott Kuhls github
 https://github.com/skuhl/autograder/blob/master/ag-email.py
 """
 
-import sys, os
+import sys, os, csv
 import getpass, smtplib
 
 if sys.hexversion < 0x030000F0:
@@ -37,23 +37,51 @@ def sendEmail(senderEmail, recipients, subject, body):
     global emailSession
     emailSession.sendmail(senderEmail, recipients, headers + '\r\n\r\n' + body)
 
-print('Who is this sent to?')
-recipientEmail = sys.stdin.readline().strip()
+if os.path.isfile('debt.csv'):
+    print('Member spreadsheet present')
+else:
+    print('Member spreadsheet not in directory')
+    sys.exit(1)
 
-print('Enter the subject line for the email message.')
-subject = sys.stdin.readline().strip()
+if os.path.isfile('moneyOwed'):
+    print('Email message present')
+else:
+    print('Email message not in directory')
+    sys.exit(1)
 
-print('Enter the content for the email message.')
-content = sys.stdin.readline().strip()
+emailMessage = open('moneyOwed', 'r+')
+message = emailMessage.read()
+print('Message before replacement')
+print(message)
+
+fileReader = csv.reader(open('debt.csv', 'r'), delimiter=',')
 
 # Login to email server
-print('Enter your username')
+print('Enter your gmail account')
 senderEmail = sys.stdin.readline().strip()
 mypassword = getpass.getpass('Password for ' + senderEmail + ': ')
 emailLogin(senderEmail, mypassword)
 
-sendEmail(senderEmail, recipientEmail, subject, content)
-print('Sent email to ' + recipientEmail + ' email successfully.')
+print('Enter the subject line for the email message.')
+subject = sys.stdin.readline().strip()
+
+print('This is the mailing list.')
+memberInfo = [row for row in fileReader]
+for row in memberInfo:
+    print(row)
+
+for name, recipEmail, amount in [row for row in memberInfo]:
+    print(', '.join([name, recipEmail, amount]))
+    personal = message.replace('[[NAME]]', name)
+    personal = personal.replace('[[MONEY]]', amount)
+
+    for letter in personal:
+        if ord(letter) > 128:
+            print('Illegal character:' + letter)
+
+    sendEmail(senderEmail, recipEmail, subject, personal.strip())    
+    print('email to ' + recipEmail + ' sent successfully.')   
+    print('')
 
 # logout
 emailLogout()
