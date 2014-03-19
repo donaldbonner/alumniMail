@@ -91,6 +91,7 @@ for name, recipEmail, amount in [row for row in memberInfo]:
     for letter in personal:
         if ord(letter) > 128:
             print('Illegal character:' + letter)
+            sys.exit(1)
 
     sendEmail(senderEmail, recipEmail, subject, personal.strip())    
     print('email to ' + recipEmail + ' sent successfully.')   
