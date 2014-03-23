@@ -45,6 +45,30 @@ def sendEmail(senderEmail, recipients, subject, body):
     global emailSession
     emailSession.sendmail(senderEmail, recipients, headers + '\r\n\r\n' + body)
 
+# format the mailing list for usage
+def processCsv(name):
+    fileReader = csv.reader(open(name, 'r'), delimiter=',')
+    print('This is the mailing list.')
+    memberInfo = [row for row in fileReader]
+    for row in memberInfo:
+        print(row)
+    return memberInfo
+
+# Tell the person how much they suck
+# 1 suck = 1 dollar owed to house
+def insertSuckage(sucks, personal):
+    suckage = round(float(amount))
+    personal += 'The TKE Robot will now tell you how it feels about you.\n\n'
+    if suckage > 0:
+        personal += '1 suck = 1 dollar owed to house\n\n'
+        for num in range(suckage):
+            personal += 'You Suck! '
+    else:
+        personal += '1 congrats = 1 pat on the back\n\n'
+        for num in range(suckage * -1):
+            personal += 'You Rock! '
+    return personal    
+
 if os.path.isfile('debt.csv'):
     print('Member spreadsheet present')
 else:
@@ -63,12 +87,7 @@ message = emailMessage.read()
 print('Message before replacement')
 print(message)
 
-# format the mailing list for usage
-fileReader = csv.reader(open('debt.csv', 'r'), delimiter=',')
-print('This is the mailing list.')
-memberInfo = [row for row in fileReader]
-for row in memberInfo:
-    print(row)
+memberInfo = processCsv('debt.csv')
 
 # Login to email server
 print('Enter your gmail account')
@@ -88,6 +107,10 @@ for name, recipEmail, amount in [row for row in memberInfo]:
     personal = message.replace('[[NAME]]', name)
     personal = personal.replace('[[MONEY]]', amount)
 
+    # insert suckage if desired
+    #personal = insertSuckage(amount, personal)
+
+    print(personal)
     for letter in personal:
         if ord(letter) > 128:
             print('Illegal character:' + letter)
