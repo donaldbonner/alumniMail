@@ -48,8 +48,8 @@ def sendEmail(senderEmail, recipients, subject, body):
 # format the mailing list for usage
 def processCsv(name):
     fileReader = csv.reader(open(name, 'r'), delimiter=',')
-    print('This is the mailing list.')
     memberInfo = [row for row in fileReader]
+    print('This is the mailing list.')
     for row in memberInfo:
         print(row)
     return memberInfo
